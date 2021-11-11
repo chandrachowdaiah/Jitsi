@@ -20,7 +20,7 @@ Run Jitsi-meet web app using development server
 
 	$ npm install
 
-3. Start the development server
+3. Start the development server and application can be accessed at https://localhost:8080
 
 	$ cd jitsi-meet
 	
@@ -68,7 +68,7 @@ Host Jitsi services using docker-compose
 	$ docker-compose exec prosody /bin/bash 
 
 	// Register user in prosody
-	
+
 	prosodyctl --config /config/prosody.cfg.lua register support meet.nsldemo.com support	
 
 
