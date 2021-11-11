@@ -64,9 +64,11 @@ Host Jitsi services using docker-compose
 7. Register a user with prosody and set username and password.
 
 	// Access the container
+
 	$ docker-compose exec prosody /bin/bash 
 
 	// Register user in prosody
+	
 	prosodyctl --config /config/prosody.cfg.lua register support meet.nsldemo.com support	
 
 
