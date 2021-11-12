@@ -839,7 +839,7 @@ var config = {
 
     // If set, add a "Open shared document" link to the bottom right menu that
     // will open an etherpad document.
-     etherpad_base: 'https://meet.nsldemo.com/etherpad/p/',
+     etherpad_base: 'https://meet.jitsi/etherpad/p/',
 
     // If etherpad_base is set, and useRoomAsSharedDocumentName is set to true,
     // open a pad with the name of the room (lowercased) instead of a pad with a
