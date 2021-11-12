@@ -38,9 +38,9 @@ Host Jitsi services using docker-compose
 
 	$ make source-package
 
-2. Extract the packaged react app ( tar.bz2 file ) to web folder of docker-jitsi-meet directory.
+2. Extract the packaged react app ( tar.bz2 file ) to web folder of docker-jitsi-meet directory
 
-3.Copy the env.example file as .env file. Uncomment ENABLE_AUTH, ENABLE_GUESTS, AUTH_TYPE.
+3. Copy the env.example file as .env file. Uncomment ENABLE_AUTH, ENABLE_GUESTS, AUTH_TYPE.
 	$ cp env.example .env
 
 4. Set strong passwords in the security section options of .env file by running the following bash script
