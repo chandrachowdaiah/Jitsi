@@ -48,7 +48,10 @@ declare var interfaceConfig: Object;
  * @returns {Function}
  */
 export function appNavigate(uri: ?string) {
+    //Added by Vipin
+    //window.location = 'https://www.nslhub.com';
     return async (dispatch: Dispatch<any>, getState: Function) => {
+        debugger;
         let location = parseURIString(uri);
 
         // If the specified location (URI) does not identify a host, use the app's
