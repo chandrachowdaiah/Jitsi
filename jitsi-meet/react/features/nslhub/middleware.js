@@ -79,7 +79,7 @@ declare var APP: Object;
     // eslint-disable-next-line no-unused-vars
     const { tenantName, type, ...actionPayload } = action;
 
-    logger.info("Tenant Name {tenantName}");
-
+    logger.info(`Tenant Name ${tenantName}`);
+    //window.location='https://www.nslhub.com';
     return next(action);
 }

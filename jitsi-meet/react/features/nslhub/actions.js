@@ -8,12 +8,12 @@ import { SET_TENANT } from './actionTypes';
  * @param {string} [tenant] - The tenant to store.
  * @returns {{
  *     type: SET_TENANT,
- *     jwt: (string|undefined)
+ *     tenaneName: (string|undefined)
  * }}
  */
-export function setTenant(tenant: ?string) {
+export function setTenant(tenantName: ?string) {
     return {
         type: SET_TENANT,
-        tenant
+        tenantName
     };
 }

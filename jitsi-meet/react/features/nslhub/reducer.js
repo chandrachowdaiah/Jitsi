@@ -18,6 +18,7 @@ ReducerRegistry.register(
     (state = {}, action) => {
         switch (action.type) {
         case SET_TENANT: {
+            debugger;
             // eslint-disable-next-line no-unused-vars
             const { type, ...payload } = action;
             const nextState = {

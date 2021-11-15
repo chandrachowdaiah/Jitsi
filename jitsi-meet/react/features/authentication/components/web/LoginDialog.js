@@ -16,7 +16,7 @@ import {
     nslAuthFailed,
     nslAuthSuccess
 } from '../../actions.web';
-
+import jwtDecode from 'jwt-decode';
 /**
  * The type of the React {@code Component} props of {@link LoginDialog}.
  */
@@ -64,6 +64,11 @@ type Props = {
      */
     roomName: string,
 
+    /**
+     * Tenant name.
+     */
+    tenantName: string,
+    
     /**
      * Invoked to obtain translated strings.
      */
@@ -223,15 +228,15 @@ class LoginDialog extends Component<Props, State> {
             };    
     
         //fetch('https://iam.nslhub.com/auth/realms/qatestr925/protocol/openid-connect/token',requestOptions)
-        fetch('https://iam.nslhub.com/auth/realms/jitsitesting/protocol/openid-connect/token',requestOptions)    
+        fetch(`https://iam.nslhub.com/auth/realms/${this.props.tenantName}/protocol/openid-connect/token`,requestOptions)    
             .then(res => res.json())
             .then(data => {
                 debugger;
             if(data && data.access_token){
                 const accessToken = "bearer "+data.access_token;
-                this.verifyModeratorRightsForUser(accessToken,callback);
+                //this.verifyModeratorRightsForUser(accessToken,callback);
+                this.verifyIsTenantSubscribedToVC(data.access_token,callback);
             }else{
-                
                 this.props.dispatch(nslAuthFailed('Invalid NSL credentials'));
                 console.log("Failed to authenticate with IAM");
             }
@@ -239,6 +244,31 @@ class LoginDialog extends Component<Props, State> {
             .catch(console.log);
     }
     
+    verifyIsTenantSubscribedToVC(accessToken,callback){
+        const tenantNameForSubscribeAPI = jwtDecode(accessToken).azp;
+        const accessTokenWithBearer = "bearer "+accessToken;
+        logger.info(`Tenant name from token azp : ${tenantNameForSubscribeAPI}`);
+        /*fetch(`https://qa3.nslhub.com:443/cdm/api/featureflags/tenantFeatures/isFeaturePresentForTenant?featureName=VideoConferencing&tenantName=${this.props.tenantName}`,
+            {
+                method: 'GET',
+                headers: { 'Authorization':accessTokenWithBearer }, 
+            })    
+            .then(res => res.json())
+            .then(data => {
+                debugger;
+            if(data && data.access_token){
+                logger.info("Tenant is subscribed to video conferencing");
+                this.verifyModeratorRightsForUser(accessTokenWithBearer,callback);
+            }else{
+                this.props.dispatch(nslAuthFailed('Not subscribed to VC'));
+                console.log("Failed to authenticate with IAM");
+            }
+            })
+            .catch(console.log);*/
+        
+        this.verifyModeratorRightsForUser(accessTokenWithBearer,callback);    
+    }
+
     
     verifyModeratorRightsForUser(accessToken,callback){
         
@@ -360,7 +390,7 @@ class LoginDialog extends Component<Props, State> {
             t
         } = this.props;
         const { password, loginStarted, username } = this.state;
-
+        const titleValue = t('dialog.authenticationRequired')+" "+this.props.tenantName;
         return (
             <Dialog
                 disableBlanketClickDismiss = { true }
@@ -374,7 +404,7 @@ class LoginDialog extends Component<Props, State> {
                 okKey = { t('dialog.login') }
                 onCancel = { this._onCancelLogin }
                 onSubmit = { this._onLogin }
-                titleKey = { t('dialog.authenticationRequired') }
+                titleKey = { titleValue }//{ t('dialog.authenticationRequired') }
                 width = { 'small' }>
                 <TextField
                     autoFocus = { true }
@@ -423,13 +453,14 @@ function mapStateToProps(state) {
         connecting,
         error: connectionError
     } = state['features/base/connection'];
-
+    const { tenantName } = state['features/nslhub'];
     return {
         _conference: authRequired,
         _configHosts: configHosts,
         _connecting: connecting || thenableWithCancel,
         _error: connectionError || authenticateAndUpgradeRoleError,
-        _progress: progress
+        _progress: progress,
+        tenantName
     };
 }
 
