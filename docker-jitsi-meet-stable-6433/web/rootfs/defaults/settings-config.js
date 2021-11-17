@@ -357,3 +357,39 @@ config.disableReactions = {{ $DISABLE_REACTIONS }};
 
 // Polls
 config.disablePolls = {{ $DISABLE_POLLS }};
+
+
+// Added by Vipin env test
+
+{{ if .Env.NSLHUB_IAM_ENV -}}
+config.nslhubIAMEnv = '{{ .Env.NSLHUB_IAM_ENV }}';
+{{ end -}}
+
+{{ if .Env.NSLHUB_CDM_ENV -}}
+config.nslhubCDMEnv = '{{ .Env.NSLHUB_CDM_ENV }}';
+{{ end -}}
+
+{{ if .Env.NSLHUB_PROSODY_USER_NAME -}}
+config.nslhubProsodyUserName = '{{ .Env.NSLHUB_PROSODY_USER_NAME }}';
+{{ end -}}
+
+{{ if .Env.NSLHUB_PROSODY_USER_PASSWORD -}}
+config.nslhubProsodyUserPassword = '{{ .Env.NSLHUB_PROSODY_USER_PASSWORD }}';
+{{ end -}}
+
+{{ if .Env.NSLHUB_VIDEO_CONFERENCING_FEATURE_NAME -}}
+config.nslhubVideoConferencingFeatureName = '{{ .Env.NSLHUB_VIDEO_CONFERENCING_FEATURE_NAME }}';
+{{ end -}}
+
+{{ if .Env.NSLHUB_VIDEO_CONFERENCING_ROLE -}}
+config.nslhubVideoConferencingRole = '{{ .Env.NSLHUB_VIDEO_CONFERENCING_ROLE }}';
+{{ end -}}
+
+{{ if .Env.NSLHUB_DEV_HOST -}}
+config.nslhubDevHost = '{{ .Env.NSLHUB_DEV_HOST }}';
+{{ end -}}
+
+{{ if .Env.NSLHUB_DEFAULT_TENANT -}}
+config.nslhubDefaultTenant = '{{ .Env.NSLHUB_DEFAULT_TENANT }}';
+{{ end -}}
+

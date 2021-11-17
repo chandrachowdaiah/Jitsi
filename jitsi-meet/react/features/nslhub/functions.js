@@ -16,8 +16,12 @@ import logger from "../analytics/logger";
     //url = 'https://jitsitesting.qa3.nslhub.com/meet/1232'
     var firstPartStr = url.toString().split(".")[0];
     var tenantName = firstPartStr.split("/")[2];
-    if(tenantName.startsWith("localhost"))
-        tenantName = "jitsitesting";
+    const config = APP.store.getState()['features/base/config'];
+    logger.info('Config retrieved in parseTenant');
+    logger.info(config);
+    const defaultHost = config.nslhubDevHost || "localhost";
+    if(tenantName.startsWith(defaultHost))
+        tenantName = config.nslhubDefaultTenant || "jitsitesting";
     logger.info(`First part ${firstPartStr}`);
     logger.info(`Tenant name=${tenantName}`);
 

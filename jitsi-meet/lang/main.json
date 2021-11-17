@@ -1168,5 +1168,10 @@
         "reject": "Reject",
         "rejectAll": "Reject all",
         "toggleLabel": "Enable lobby"
+    },
+    "nslhub":{
+        "invalidIAMCredentials": "Invalid NSL credentials, Please Enter again",
+        "notAuthorizedToHost": "Not authorized to host meetings",
+        "tenantNotSubscribedToVC":"Tenant not subscribed to VC"
     }
 }

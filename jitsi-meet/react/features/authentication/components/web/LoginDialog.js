@@ -17,6 +17,8 @@ import {
     nslAuthSuccess
 } from '../../actions.web';
 import jwtDecode from 'jwt-decode';
+import { NSL_AUTH_FAILED } from '../../actionTypes';
+const process = require('process');
 /**
  * The type of the React {@code Component} props of {@link LoginDialog}.
  */
@@ -72,7 +74,9 @@ type Props = {
     /**
      * Invoked to obtain translated strings.
      */
-    t: Function
+    t: Function,
+
+    config: Object
 }
 
 /**
@@ -157,8 +161,8 @@ class LoginDialog extends Component<Props, State> {
         // Added by Vipin
         this.authenticateUserWithNSL(username,password,()=>{
             console.log("Callback called...");
-            var username = "support";
-            var password = "support";
+            var username = this.props.config.nslhubProsodyUserName || "support";
+            var password = this.props.config.nslhubProsodyUserPassword || "support";
             console.log(username);
             const jid = toJid(username, configHosts);
 
@@ -206,73 +210,78 @@ class LoginDialog extends Component<Props, State> {
     // Added by Vipin
     authenticateUserWithNSL(username,password,callback){
         var requestBody = {
-                'username': username,//'admin@nslhub.com',
-                'password': password,//'admin@123',
-                'client_id': 'jitsitesting', //'qatestr925',
-                'grant_type': 'password'
-            };
+            'username': username,
+            'password': password,
+            'client_id': this.props.tenantName, 
+            'grant_type': 'password'
+        };
         
-            var formBody = [];
-            for (var property in requestBody) {
-              var encodedKey = encodeURIComponent(property);
-              var encodedValue = encodeURIComponent(requestBody[property]);
-              formBody.push(encodedKey + "=" + encodedValue);
-            }
-            formBody = formBody.join("&");
-    
-        
-            const requestOptions = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-                body: formBody
-            };    
-    
+        var formBody = [];
+        for (var property in requestBody) {
+            var encodedKey = encodeURIComponent(property);
+            var encodedValue = encodeURIComponent(requestBody[property]);
+            formBody.push(encodedKey + "=" + encodedValue);
+        }
+        formBody = formBody.join("&");
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+            body: formBody
+        };    
+        logger.info(`NSLHUB Environment`);
+        logger.info(this.props.config)
         //fetch('https://iam.nslhub.com/auth/realms/qatestr925/protocol/openid-connect/token',requestOptions)
         fetch(`https://iam.nslhub.com/auth/realms/${this.props.tenantName}/protocol/openid-connect/token`,requestOptions)    
-            .then(res => res.json())
-            .then(data => {
-                debugger;
+        .then(res => res.json())
+        .then(data => {
+            debugger;
             if(data && data.access_token){
                 const accessToken = "bearer "+data.access_token;
                 //this.verifyModeratorRightsForUser(accessToken,callback);
                 this.verifyIsTenantSubscribedToVC(data.access_token,callback);
             }else{
-                this.props.dispatch(nslAuthFailed('Invalid NSL credentials'));
+                this.props.dispatch(nslAuthFailed(this.props.t('nslhub.invalidIAMCredentials')));
                 console.log("Failed to authenticate with IAM");
             }
-            })
-            .catch(console.log);
+        })
+        .catch(console.log);
     }
     
     verifyIsTenantSubscribedToVC(accessToken,callback){
         const tenantNameForSubscribeAPI = jwtDecode(accessToken).azp;
         const accessTokenWithBearer = "bearer "+accessToken;
         logger.info(`Tenant name from token azp : ${tenantNameForSubscribeAPI}`);
-        /*fetch(`https://qa3.nslhub.com:443/cdm/api/featureflags/tenantFeatures/isFeaturePresentForTenant?featureName=VideoConferencing&tenantName=${this.props.tenantName}`,
-            {
-                method: 'GET',
-                headers: { 'Authorization':accessTokenWithBearer }, 
-            })    
-            .then(res => res.json())
-            .then(data => {
-                debugger;
-            if(data && data.access_token){
+        const cdmEnv  = this.props.config.nslhubCDMEnv || "paas3";
+        const videoConferencingFeature = this.props.config.nslhubVideoConferencingFeatureName || "VideoConferencing";
+        logger.info(`CDM Environment ${this.props.config}`);
+        fetch(`https://${cdmEnv}.nslhub.com/dsd-orch/cdm/api/featureflags/tenantFeatures/isFeaturePresentForTenant?featureName=${videoConferencingFeature}&tenantName=${this.props.tenantName}`,
+        {
+            method: 'GET',
+            headers: { 'Authorization':accessTokenWithBearer }, 
+        })    
+        .then(res => res.json())
+        .then(data => {
+            debugger;
+            logger.info(`Is subscribed to VC ${data}`);
+            if(data){
                 logger.info("Tenant is subscribed to video conferencing");
                 this.verifyModeratorRightsForUser(accessTokenWithBearer,callback);
-            }else{
-                this.props.dispatch(nslAuthFailed('Not subscribed to VC'));
-                console.log("Failed to authenticate with IAM");
+             }else{
+                this.props.dispatch(nslAuthFailed(this.props.t('nslhub.tenantNotSubscribedToVC')));
+                console.log("Not subscribed to VC");
             }
-            })
-            .catch(console.log);*/
+        })
+        .catch(console.log);
         
-        this.verifyModeratorRightsForUser(accessTokenWithBearer,callback);    
+        //this.verifyModeratorRightsForUser(accessTokenWithBearer,callback);    
     }
 
     
     verifyModeratorRightsForUser(accessToken,callback){
-        
-        fetch('https://paas3.nslhub.com:443/nsl-iam/api/user/getActiveUser',{
+        const iamEnv = this.props.config.nslhubIAMEnv || "paas3";
+        logger.info(`IAM Env ${this.props.config.nslhubIAMEnv}`);
+        fetch(`https://${iamEnv}.nslhub.com/dsd-orch/nsl-iam/api/user/getActiveUser`,{
             method: 'GET',
             headers: { 'Authorization':accessToken }, 
         })
@@ -281,14 +290,21 @@ class LoginDialog extends Component<Props, State> {
             debugger;
             var roles = userData.roles;
             var isModerator = false;
-                        /*roles.forEach(role => {
-                           if(role.name === 'orghead') {
-                               console.log("User is moderator proceed....");
-                            callback();	
-                           }
-                        });*/
+            /*var isSubscribed = false;            
+            for(var it=0;it<userData.planNFeatureMapping.featureList.length;it++){
+                if(userData.planNFeatureMapping.featureList[it]==='VideoConferencing'){
+                    isSubscribed = true;
+                    break;
+                }
+            }   
+            if(!isSubscribed){
+                this.props.dispatch(nslAuthFailed('Not Subscribed to VC'));
+                logger.info("Not subscribed to VC");  
+                return;
+            }    */   
+            const videoConferencingRole = this.props.config.nslhubVideoConferencingRole || 'Moderator';  
             for(var it=0;it<roles.length;it++){
-                if(roles[it].name=='Moderator'){
+                if(roles[it].name==videoConferencingRole){
                     isModerator = true;
                     break;
                 }
@@ -302,7 +318,7 @@ class LoginDialog extends Component<Props, State> {
                 //joinConference();
             }                  
             else{
-                this.props.dispatch(nslAuthFailed('Not Authorized'));
+                this.props.dispatch(nslAuthFailed(this.props.t('nslhub.notAuthorizedToHost')));
                 logger.info("Not moderator...");    
             }          
             logger.info(userData);
@@ -356,7 +372,7 @@ class LoginDialog extends Component<Props, State> {
                     && credentials.password === password) {
                     messageKey = t('dialog.incorrectPassword');
                 }
-            } else if(name=='NSL_AUTH_FAILED'){
+            } else if(name===NSL_AUTH_FAILED){
                 debugger;
                 messageKey = error.message //t('dialog.incorrectPassword');
             }
@@ -454,13 +470,15 @@ function mapStateToProps(state) {
         error: connectionError
     } = state['features/base/connection'];
     const { tenantName } = state['features/nslhub'];
+    const config = state['features/base/config'];
     return {
         _conference: authRequired,
         _configHosts: configHosts,
         _connecting: connecting || thenableWithCancel,
         _error: connectionError || authenticateAndUpgradeRoleError,
         _progress: progress,
-        tenantName
+        tenantName,
+        config
     };
 }
 
