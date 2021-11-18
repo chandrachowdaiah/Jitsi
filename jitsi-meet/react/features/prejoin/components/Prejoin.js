@@ -309,7 +309,7 @@ class Prejoin extends Component<Props, State> {
         const { _closeDialog, _onDropdownClose, _onJoinButtonClick, _onJoinKeyPress, _showDialogKeyPress,
             _onJoinConferenceWithoutAudioKeyPress, _onOptionsClick, _setName, _showDialog } = this;
         const { showJoinByPhoneButtons, showError } = this.state;
-        const titleValue = t('prejoin.joinMeeting')+" : "+this.props.tenantName;     
+        const titleValue = t('prejoin.joinMeeting');
         return (
             <PreMeetingScreen
                 showDeviceStatus = { deviceStatusVisible }

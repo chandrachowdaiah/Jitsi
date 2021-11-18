@@ -183,7 +183,7 @@
         "alreadySharedVideoMsg": "Another participant is already sharing a video. This conference allows only one shared video at a time.",
         "alreadySharedVideoTitle": "Only one shared video is allowed at a time",
         "applicationWindow": "Application window",
-        "authenticationRequired": "NSL Authentication required",
+        "authenticationRequired": "NSL Authentication required for",
         "Back": "Back",
         "cameraConstraintFailedError": "Your camera does not satisfy some of the required constraints.",
         "cameraNotFoundError": "Camera was not found.",

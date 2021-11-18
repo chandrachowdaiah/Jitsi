@@ -359,7 +359,7 @@ config.disableReactions = {{ $DISABLE_REACTIONS }};
 config.disablePolls = {{ $DISABLE_POLLS }};
 
 
-// Added by Vipin env test
+// Added by Vipin 
 
 {{ if .Env.NSLHUB_IAM_ENV -}}
 config.nslhubIAMEnv = '{{ .Env.NSLHUB_IAM_ENV }}';
