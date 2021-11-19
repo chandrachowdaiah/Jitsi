@@ -302,6 +302,7 @@ class WelcomePage extends AbstractWelcomePage {
      * @returns {void}
      */
     _onFormSubmit(event) {
+        debugger;
         event.preventDefault();
 
         if (!this._roomInputRef || this._roomInputRef.reportValidity()) {

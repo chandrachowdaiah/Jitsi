@@ -65,8 +65,9 @@ export function appNavigate(uri: ?string) {
                 // FIXME Turn location's host, hostname, and port properties into
                 // setters in order to reduce the risks of inconsistent state.
                 location.hostname = defaultLocation.hostname;
+                // Added by Vipin : Fix for missing / while combining the pathname ( For meet route)
                 location.pathname
-                    = defaultLocation.pathname + location.pathname.substr(1);
+                    = defaultLocation.pathname + (defaultLocation.pathname.endsWith("/")?"":"/") + location.pathname.substr(1);
                 location.port = defaultLocation.port;
                 location.protocol = defaultLocation.protocol;
             } else {
@@ -288,7 +289,7 @@ export function reloadWithStoredParams() {
  */
 export function maybeRedirectToWelcomePage(options: Object = {}) {
     return (dispatch: Dispatch<any>, getState: Function) => {
-
+        debugger;
         const {
             enableClosePage
         } = getState()['features/base/config'];
@@ -337,6 +338,7 @@ export function maybeRedirectToWelcomePage(options: Object = {}) {
         // if Welcome page is enabled redirect to welcome page after 3 sec, if
         // there is a thank you message to be shown, 0.5s otherwise.
         if (getState()['features/base/config'].enableWelcomePage) {
+        
             setTimeout(
                 () => {
                     dispatch(redirectWithStoredParams('/'));
