@@ -13,7 +13,7 @@ import {
     participantLeft
 } from '../participants';
 import { toState } from '../redux';
-import {  } from '../util';
+import { parseURLParams } from '../util';
 import { getBackendSafePath, getJitsiMeetGlobalNS, safeDecodeURIComponent } from '../util';
 
 import {
@@ -450,5 +450,7 @@ function safeStartCase(s = '') {
  * {@code url}; otherwise, {@code undefined}.
  */
  export function parseMeetingPasswordFromURLParams(url: URL = window.location) {
-    return parseURLParams(url, true, 'search').password;
+    debugger;
+    let password = parseURLParams(url, true, 'search').password;
+    return password;
 }

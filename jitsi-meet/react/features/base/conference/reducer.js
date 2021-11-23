@@ -85,6 +85,7 @@ ReducerRegistry.register(
             return _setPassword(state, action);
 
         case SET_PASSWORD_FROM_URL:
+            debugger;
             return _setPasswordFromURL(state,action);    
 
         case SET_PENDING_SUBJECT_CHANGE:

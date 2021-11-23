@@ -39,6 +39,7 @@ import {
     conferenceWillLeave,
     createConference,
     setSubject,
+    setPasswordFromURL
 } from './actions';
 import {
     _addLocalTracksToConference,
