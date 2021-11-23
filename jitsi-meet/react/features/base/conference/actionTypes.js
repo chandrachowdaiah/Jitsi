@@ -217,3 +217,16 @@ export const SET_ROOM = 'SET_ROOM';
  * }
  */
 export const SET_START_MUTED_POLICY = 'SET_START_MUTED_POLICY';
+
+/**
+ * The type of (redux) action which gets password from url and sets it to join or lock a specific
+ * {@code JitsiConference}.
+ *
+ * {
+ *     type: SET_PASSWORD_FROM_URL,
+ *     conference: JitsiConference,
+ *     method: Function
+ *     password: string
+ * }
+ */
+ export const SET_PASSWORD_FROM_URL = 'SET_PASSWORD_FROM_URL';
