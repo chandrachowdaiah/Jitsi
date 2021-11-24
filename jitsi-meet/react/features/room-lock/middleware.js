@@ -115,6 +115,7 @@ function _conferenceFailed({ dispatch }, next, action) {
             // Added by vipin : Join the meeting if meeting password is present in url else prompt user for password
             const password = APP.store.getState()['features/base/conference'].password///'123';
             debugger;
+            const state = APP.store.getState();
             if(password && password.length>0)
                 dispatch(setPassword(conference, conference.join, password));
             else

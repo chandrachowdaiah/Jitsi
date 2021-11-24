@@ -53,6 +53,7 @@ import { SET_LOCATION_URL } from '../connection';
 import logger from './logger';
 import { setPassword } from '.';
 import { UPGRADE_ROLE_FINISHED } from '../../authentication/actions.any';
+import { setMeetingPasswordFromURL } from '../../nslhub';
 
 declare var APP: Object;
 
@@ -578,6 +579,17 @@ function _updateLocalParticipantInConference({ dispatch, getState }, next, actio
             if (typeof pendingSubjectChange !== 'undefined' && pendingSubjectChange !== subject) {
                 dispatch(setSubject(pendingSubjectChange));
             }
+            
+            // Added by vipin : moderator can preset password from url
+            const password = APP.store.getState()["features/nslhub"].meetingPassword;
+            debugger;
+            if(password && password.length>0){
+                dispatch(setPassword(conference,conference.lock,password));
+                
+            }
+
+
+
         }
     }
 

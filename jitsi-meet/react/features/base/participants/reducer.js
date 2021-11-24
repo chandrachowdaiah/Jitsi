@@ -195,7 +195,6 @@ ReducerRegistry.register('features/base/participants', (state = DEFAULT_STATE, a
                 state.haveParticipantWithScreenSharingFeature = true;
             }
         }
-
         return {
             ...state
         };

@@ -1,4 +1,5 @@
 import logger from "../analytics/logger";
+import { parseURLParams } from "../base/util";
 
 
 /**
@@ -45,4 +46,19 @@ import logger from "../analytics/logger";
  */
  export function getTenantName(state: Object): string {
     return getNSLHUBState(state).tenantName;
+}
+
+/**
+ * Retrieves the Meeting password, if any, defined by a specific
+ * {@link URL}.
+ *
+ * @param {URL} url - The {@code URL} to parse and retrieve the Meeting Password
+ * , if any, from.
+ * @returns {string} The Meeting Password, if any, defined by the specified
+ * {@code url}; otherwise, {@code undefined}.
+ */
+ export function parseMeetingPasswordFromURLParams(url: URL = window.location) {
+    debugger;
+    let password = parseURLParams(url, true, 'search').password;
+    return password;
 }
