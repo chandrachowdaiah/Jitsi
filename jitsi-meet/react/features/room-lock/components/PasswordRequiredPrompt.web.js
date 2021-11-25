@@ -162,8 +162,8 @@ class PasswordRequiredPrompt extends Component<Props, State> {
             setPassword(conference, conference.join, this.state.password));
     
         /// Added by vipin : set meeting password in nslhub state
-        this.props.dispatch(
-            setMeetingPasswordFromURL(this.state.password));
+       /* this.props.dispatch(
+            setMeetingPasswordFromURL(this.state.password));*/
 
         // We have used the password so let's clean it.
         this.setState({

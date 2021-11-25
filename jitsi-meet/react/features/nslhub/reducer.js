@@ -52,11 +52,8 @@ ReducerRegistry.register(
  */
  function _setMeetingPasswordFromURL(state, { meetingPassword }) {
    
-    if(meetingPassword){
-        return assign(state, {
-            meetingPassword
-        });
-    }
-
-    return state;
+    return assign(state, {
+        meetingPassword
+    });
+    
 }    
