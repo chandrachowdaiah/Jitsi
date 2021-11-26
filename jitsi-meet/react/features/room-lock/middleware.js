@@ -116,8 +116,11 @@ function _conferenceFailed({ dispatch }, next, action) {
             const password = APP.store.getState()['features/base/conference'].password///'123';
             debugger;
             const state = APP.store.getState();
-            if(password && password.length>0)
+            if(password && password.length>0){
+                const result = next(action);
                 dispatch(setPassword(conference, conference.join, password));
+                return result;
+            }
             else
                 dispatch(_openPasswordRequiredPrompt(conference));
         }

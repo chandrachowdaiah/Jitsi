@@ -159,6 +159,7 @@ ReducerRegistry.register('features/base/participants', (state = DEFAULT_STATE, a
     }
     case SET_LOADABLE_AVATAR_URL:
     case PARTICIPANT_UPDATED: {
+        //debugger;
         const { participant } = action;
         let { id } = participant;
         const { local } = participant;
@@ -200,6 +201,7 @@ ReducerRegistry.register('features/base/participants', (state = DEFAULT_STATE, a
         };
     }
     case PARTICIPANT_JOINED: {
+        debugger;
         const participant = _participantJoined(action);
         const { id, isFakeParticipant, name, pinned } = participant;
         const { pinnedParticipant, dominantSpeaker } = state;
