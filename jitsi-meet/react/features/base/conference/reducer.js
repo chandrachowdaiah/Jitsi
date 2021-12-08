@@ -64,7 +64,6 @@ ReducerRegistry.register(
             return _conferenceLeftOrWillLeave(state, action);
 
         case CONFERENCE_WILL_JOIN:
-            debugger;
             return _conferenceWillJoin(state, action);
 
         case CONNECTION_WILL_CONNECT:
