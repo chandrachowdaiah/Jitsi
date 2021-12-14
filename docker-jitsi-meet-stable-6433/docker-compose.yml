@@ -4,7 +4,7 @@ services:
     # Frontend
     web:
         #image: jitsi/web:stable-6433
-        image: nslhub/web:latest
+        image: nslhub-meet/web:latest
         restart: ${RESTART_POLICY}
         ports:
             - '${HTTP_PORT}:80'
@@ -87,6 +87,14 @@ services:
             - NGINX_RESOLVER
             - NGINX_WORKER_PROCESSES
             - NGINX_WORKER_CONNECTIONS
+            - NSLHUB_CDM_ENV
+            - NSLHUB_IAM_ENV
+            - NSLHUB_PROSODY_USER_NAME
+            - NSLHUB_PROSODY_USER_PASSWORD
+            - NSLHUB_VIDEO_CONFERENCING_FEATURE_NAME
+            - NSLHUB_VIDEO_CONFERENCING_ROLE
+            - NSLHUB_DEV_HOST
+            - NSLHUB_DEFAULT_TENANT
             - PEOPLE_SEARCH_URL
             - PUBLIC_URL
             - P2P_PREFERRED_CODEC

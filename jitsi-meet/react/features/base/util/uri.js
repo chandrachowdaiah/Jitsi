@@ -333,7 +333,7 @@ export function parseURIString(uri: ?string) {
     if (typeof uri !== 'string') {
         return undefined;
     }
-
+    debugger;
     const obj = parseStandardURIString(_fixURIStringScheme(uri));
 
     // XXX While the components/segments of pathname are URI encoded, Jitsi Meet
@@ -354,6 +354,14 @@ export function parseURIString(uri: ?string) {
 
     obj.room = pathname.substring(contextRootEndIndex + 1) || undefined;
 
+
+    // Added by vipin : for meet route
+   /* if(obj.room==='meet'){
+        const arr = pathname.split("/")
+        if(arr[arr.length-2]!=='meet')
+            obj.room=undefined;
+    }*/
+    
     if (contextRootEndIndex > 1) {
         // The part of the pathname from the beginning to the room name is the tenant.
         obj.tenant = pathname.substring(1, contextRootEndIndex);

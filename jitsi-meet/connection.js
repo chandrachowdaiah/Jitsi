@@ -211,6 +211,7 @@ export async function connect(id, password, roomName) {
  * @returns {Promise<JitsiConnection>}
  */
 export function openConnection({ id, password, retry, roomName }) {
+    debugger;
     const usernameOverride
         = jitsiLocalStorage.getItem('xmpp_username_override');
     const passwordOverride

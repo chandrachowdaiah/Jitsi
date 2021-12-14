@@ -19,7 +19,6 @@ const OS = Platform.OS;
  */
 document.addEventListener('DOMContentLoaded', () => {
     const now = window.performance.now();
-
     APP.connectionTimes['document.ready'] = now;
     logger.log('(TIME) document ready:\t', now);
 });

@@ -26,6 +26,10 @@ import {
 
 import JoinByPhoneDialog from './dialogs/JoinByPhoneDialog';
 
+// Added by Vipin
+import { getTenantName } from '../../nslhub/functions';
+
+
 type Props = {
 
     /**
@@ -67,6 +71,12 @@ type Props = {
      * The name of the meeting that is about to be joined.
      */
     roomName: string,
+
+    // Added by Vipin
+    /**
+     * The name of the NSLHUB tenant in which it is hosted.
+     */
+     tenantName: string,
 
     /**
      * Sets visibility of the 'JoinByPhoneDialog'.
@@ -299,11 +309,11 @@ class Prejoin extends Component<Props, State> {
         const { _closeDialog, _onDropdownClose, _onJoinButtonClick, _onJoinKeyPress, _showDialogKeyPress,
             _onJoinConferenceWithoutAudioKeyPress, _onOptionsClick, _setName, _showDialog } = this;
         const { showJoinByPhoneButtons, showError } = this.state;
-
+        const titleValue = t('prejoin.joinMeeting');
         return (
             <PreMeetingScreen
                 showDeviceStatus = { deviceStatusVisible }
-                title = { t('prejoin.joinMeeting') }
+                title = { titleValue } //{ t('prejoin.joinMeeting') }
                 videoMuted = { !showCameraPreview }
                 videoTrack = { videoTrack }>
                 <div
@@ -403,7 +413,8 @@ function mapStateToProps(state): Object {
         hasJoinByPhoneButton: isJoinByPhoneButtonVisible(state),
         readOnlyName: isNameReadOnly(state),
         showCameraPreview: !isVideoMutedByUser(state),
-        videoTrack: getLocalJitsiVideoTrack(state)
+        videoTrack: getLocalJitsiVideoTrack(state),
+        tenantName:getTenantName(state)
     };
 }
 

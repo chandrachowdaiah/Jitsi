@@ -115,7 +115,7 @@ function _getWebConferenceRoute(state): ?Promise<Route> {
  */
 function _getWebWelcomePageRoute(state): Promise<Route> {
     const route = _getEmptyRoute();
-
+    debugger;
     if (isWelcomePageUserEnabled(state)) {
         if (isSupportedBrowser()) {
             route.component = WelcomePage;

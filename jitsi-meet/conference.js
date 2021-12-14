@@ -47,7 +47,8 @@ import {
     onStartMutedPolicyChanged,
     p2pStatusChanged,
     sendLocalParticipant,
-    _conferenceWillJoin
+    _conferenceWillJoin,
+    setPassword
 } from './react/features/base/conference';
 import { getReplaceParticipant } from './react/features/base/config/functions';
 import {
@@ -2032,6 +2033,7 @@ export default {
         });
         room.on(JitsiConferenceEvents.USER_JOINED, (id, user) => {
             // The logic shared between RN and web.
+            debugger;
             commonUserJoinedHandling(APP.store, room, user);
 
             if (user.isHidden()) {
@@ -2068,6 +2070,8 @@ export default {
             if (this.isLocalId(id)) {
                 logger.info(`My role changed, new role: ${role}`);
 
+                debugger;
+                const state = APP.store.getState()['features/base/participants']
                 APP.store.dispatch(localParticipantRoleChanged(role));
                 APP.API.notifyUserRoleChanged(id, role);
             } else {
