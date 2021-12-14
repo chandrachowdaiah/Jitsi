@@ -79,6 +79,7 @@ ReducerRegistry.register(
             return set(state, 'followMeEnabled', action.enabled);
 
         case SET_LOCATION_URL:
+            debugger;
             return set(state, 'room', undefined);
 
         case SET_PASSWORD:
