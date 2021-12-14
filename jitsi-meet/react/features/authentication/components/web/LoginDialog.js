@@ -311,9 +311,10 @@ class LoginDialog extends Component<Props, State> {
             }
 
             if(isModerator){
-                logger.info("User is moderator proceed....");
+                logger.info("User has moderator rights proceed....");
                 //this.props.dispatch(nslAuthSuccess('NSL Authentication Successful'));
-                callback();
+                //callback();
+                this.checkIsMeetingScheduledByUser(accessToken,userData.id,callback);
                 debugger;
                 //joinConference();
             }                  
@@ -326,6 +327,50 @@ class LoginDialog extends Component<Props, State> {
         .catch(console.log)
     
     }
+
+    checkIsMeetingScheduledByUser(accessToken,fixedMeetingId,callback){
+        const iamEnv = "localhost:9090" //this.props.config.nslhubIAMEnv || "paas3";
+        logger.info(`IAM Env ${this.props.config.nslhubIAMEnv}`);
+        fetch(`http://${iamEnv}/nsl-iam/api/videoconferencing/getScheduledMeetingsForUser`,{
+            method: 'GET',
+            headers: { 'Authorization':accessToken }, 
+        })
+        .then(res => res.json())
+        .then((meetingList) => {
+            debugger; 
+            var isScheduledByUser = false;
+            const meetingId = APP.store.getState()["features/base/conference"].room;
+            console.log(APP.store.getState())
+            // Check if current meeting id is part of user's scheduled meetings
+            for(var it=0;it<meetingList.length;it++){
+                if(meetingList[it].meetingId==meetingId){
+                    isScheduledByUser = true;
+                    break;
+                }
+            }
+
+            // Check if fixedMeeting matches with current meeting id, if so it is the instant meeting id
+            if(fixedMeetingId==meetingId)
+                isScheduledByUser = true;
+
+        
+            if(isScheduledByUser){
+                logger.info("User has scheduled the meeting proceed....");
+                //this.props.dispatch(nslAuthSuccess('NSL Authentication Successful'));
+                callback();
+                debugger;
+                //joinConference();
+            }                  
+            else{
+                this.props.dispatch(nslAuthFailed(this.props.t('nslhub.meetingNotScheduledByUser')));
+                logger.info("Not scheduled by current user...");    
+            }          
+            logger.info(userData);
+        })
+        .catch(console.log)
+    
+    }
+
 
     _onChange: Object => void;
 

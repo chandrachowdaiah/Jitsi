@@ -44,7 +44,11 @@ export function getInviteURL(stateOrGetState: Function | Object): string {
         = state instanceof URL
             ? state
             : state['features/base/connection'].locationURL;
-
+    debugger;
+    // Added by Vipin Rai 
+    const meetingPassword = state['features/nslhub'].meetingPassword || '';
+    //const meetingPassword  = state['features/base/conference'].password ||  '';
+    //const meetingPasswordRequired = state['features/base/conference'].passwordRequired || false;
     // If there's no locationURL on the base/connection feature try the base/config where it's set earlier.
     if (!locationURL) {
         locationURL = state['features/base/config'].locationURL;
@@ -60,9 +64,13 @@ export function getInviteURL(stateOrGetState: Function | Object): string {
     if (inviteDomain) {
         const meetingId
             = state['features/base/config'].brandingRoomAlias || urlWithoutParams.pathname.replace(/\//, '');
-
-        return `${inviteDomain}/${meetingId}`;
+        // Added by vipin : include meeting password in invite link
+        return (meetingPassword && meetingPassword.length>0)?`${inviteDomain}/${meetingId}?password=${meetingPassword}`:`${inviteDomain}/${meetingId}`;
     }
+
+    // Added by vipin : include meeting password in invite link
+    if(meetingPassword && meetingPassword.length>0)
+        urlWithoutParams.href += `?password=${meetingPassword}`;
 
     return urlWithoutParams.href;
 }

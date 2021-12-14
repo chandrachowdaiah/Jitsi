@@ -44,7 +44,8 @@ import {
     SET_PASSWORD_FAILED,
     SET_ROOM,
     SET_PENDING_SUBJECT_CHANGE,
-    SET_START_MUTED_POLICY
+    SET_START_MUTED_POLICY,
+    SET_PASSWORD_FROM_URL
 } from './actionTypes';
 import {
     AVATAR_URL_COMMAND,
@@ -726,5 +727,25 @@ export function setSubject(subject: string) {
                 subject
             });
         }
+    };
+}
+
+// Added by vipin
+
+/**
+ * Sets meeting password of the conference to be joined.
+ *
+ * @param {(string|undefined)} room - The meeting password of the conference to
+ * be joined.
+ * @returns {{
+ *     type: SET_PASSWORD_FROM_URL,
+ *     room: string
+ * }}
+ */
+export function setPasswordFromURL(password: ?string) {
+    debugger;
+    return {
+        type: SET_PASSWORD_FROM_URL,
+        password
     };
 }

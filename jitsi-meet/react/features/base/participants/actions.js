@@ -249,6 +249,7 @@ export function participantConnectionStatusChanged(id, connectionStatus) {
  */
 export function participantJoined(participant) {
     // Only the local participant is not identified with an id-conference pair.
+    debugger;
     if (participant.local) {
         return {
             type: PARTICIPANT_JOINED,
@@ -274,9 +275,11 @@ export function participantJoined(participant) {
         // requests.)
         const stateFeaturesBaseConference
             = getState()['features/base/conference'];
-
+        debugger;
+        // Added by vipin : FIX for participant list not getting updated
         if (conference === stateFeaturesBaseConference.conference
-                || conference === stateFeaturesBaseConference.joining) {
+                || conference === stateFeaturesBaseConference.joining){
+            
             return dispatch({
                 type: PARTICIPANT_JOINED,
                 participant

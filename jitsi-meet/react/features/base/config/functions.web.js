@@ -51,7 +51,7 @@ export function getReplaceParticipant(state: Object): string {
  */
 export function getToolbarButtons(state: Object): Array<string> {
     const { toolbarButtons } = state['features/base/config'];
-
+    debugger;
     return Array.isArray(toolbarButtons) ? toolbarButtons : TOOLBAR_BUTTONS;
 }
 

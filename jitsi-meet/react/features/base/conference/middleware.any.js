@@ -38,15 +38,22 @@ import {
     conferenceFailed,
     conferenceWillLeave,
     createConference,
-    setSubject
+    setSubject,
+    setPasswordFromURL
 } from './actions';
 import {
     _addLocalTracksToConference,
     _removeLocalTracksFromConference,
     forEachConference,
-    getCurrentConference
+    getCurrentConference,
+    parseMeetingPasswordFromURLParams
 } from './functions';
+import { SET_CONFIG } from '../config';
+import { SET_LOCATION_URL } from '../connection';
 import logger from './logger';
+import { setPassword } from '.';
+import { UPGRADE_ROLE_FINISHED } from '../../authentication/actions.any';
+import { setMeetingPasswordFromURL } from '../../nslhub';
 
 declare var APP: Object;
 
@@ -97,6 +104,12 @@ MiddlewareRegistry.register(store => next => action => {
     case TRACK_ADDED:
     case TRACK_REMOVED:
         return _trackAddedOrRemoved(store, next, action);
+    case SET_CONFIG:
+    case SET_LOCATION_URL:
+        debugger;
+        return _setConfigOrLocationURL(store, next, action);   
+    case UPGRADE_ROLE_FINISHED:
+        return _setMeetingPasswordIfPresentInURL(store,next,action);      
     }
 
     return next(action);
@@ -220,6 +233,8 @@ function _conferenceJoined({ dispatch, getState }, next, action) {
         && !conference.isHidden()) {
         dispatch(openDisplayNamePrompt(undefined));
     }
+
+    
 
     return result;
 }
@@ -564,8 +579,78 @@ function _updateLocalParticipantInConference({ dispatch, getState }, next, actio
             if (typeof pendingSubjectChange !== 'undefined' && pendingSubjectChange !== subject) {
                 dispatch(setSubject(pendingSubjectChange));
             }
+            
+            // Added by vipin : moderator can preset password from url
+            const password = APP.store.getState()["features/nslhub"].meetingPassword;
+            debugger;
+            if(password && password.length>0){
+                dispatch(setPassword(conference,conference.lock,password));
+                
+            }
+
+
+
         }
     }
 
     return result;
 }
+
+/**
+ * Notifies the feature jwt that the action {@link SET_CONFIG} or
+ * {@link SET_LOCATION_URL} is being dispatched within a specific redux
+ * {@code store}.
+ *
+ * @param {Store} store - The redux store in which the specified {@code action}
+ * is being dispatched.
+ * @param {Dispatch} next - The redux dispatch function to dispatch the
+ * specified {@code action} to the specified {@code store}.
+ * @param {Action} action - The redux action {@code SET_CONFIG} or
+ * {@code SET_LOCATION_URL} which is being dispatched in the specified
+ * {@code store}.
+ * @private
+ * @returns {Object} The new state that is the result of the reduction of the
+ * specified {@code action}.
+ */
+ function _setConfigOrLocationURL({ dispatch, getState }, next, action) {
+    const result = next(action);
+    debugger;
+    const { locationURL } = getState()['features/base/connection'];
+
+    dispatch(
+        setPasswordFromURL(locationURL ? parseMeetingPasswordFromURLParams(locationURL) : undefined));
+
+    return result;
+}
+
+
+/**
+ * Notifies the feature jwt that the action {@link SET_CONFIG} or
+ * {@link SET_LOCATION_URL} is being dispatched within a specific redux
+ * {@code store}.
+ *
+ * @param {Store} store - The redux store in which the specified {@code action}
+ * is being dispatched.
+ * @param {Dispatch} next - The redux dispatch function to dispatch the
+ * specified {@code action} to the specified {@code store}.
+ * @param {Action} action - The redux action {@code SET_CONFIG} or
+ * {@code SET_LOCATION_URL} which is being dispatched in the specified
+ * {@code store}.
+ * @private
+ * @returns {Object} The new state that is the result of the reduction of the
+ * specified {@code action}.
+ */
+ function _setMeetingPasswordIfPresentInURL({ dispatch, getState }, next, action) {
+    const result = next(action);
+
+    const { conference } = getState()['features/base/conference'];
+    const state = APP.store.getState();
+    // Added by vipin :Set the password to the conference if present in the url
+    if(conference){
+        //debugger;
+       // dispatch(setPassword(conference,conference.lock,'123'));
+    }
+
+    return result;
+}
+

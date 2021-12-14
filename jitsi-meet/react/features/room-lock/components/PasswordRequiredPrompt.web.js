@@ -8,6 +8,7 @@ import { setPassword } from '../../base/conference';
 import { Dialog } from '../../base/dialog';
 import { translate } from '../../base/i18n';
 import { connect } from '../../base/redux';
+import { setMeetingPasswordFromURL } from '../../nslhub';
 import { _cancelPasswordRequiredPrompt } from '../actions';
 
 /**
@@ -159,6 +160,10 @@ class PasswordRequiredPrompt extends Component<Props, State> {
         // again will be marked as locked.
         this.props.dispatch(
             setPassword(conference, conference.join, this.state.password));
+    
+        /// Added by vipin : set meeting password in nslhub state
+       /* this.props.dispatch(
+            setMeetingPasswordFromURL(this.state.password));*/
 
         // We have used the password so let's clean it.
         this.setState({

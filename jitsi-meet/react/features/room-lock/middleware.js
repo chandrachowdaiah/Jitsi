@@ -19,6 +19,7 @@ import { _openPasswordRequiredPrompt } from './actions';
 import { PasswordRequiredPrompt } from './components';
 import { LOCKED_REMOTELY } from './constants';
 import logger from './logger';
+import { setPassword } from '../base/conference';
 
 declare var APP: Object;
 
@@ -111,7 +112,17 @@ function _conferenceFailed({ dispatch }, next, action) {
             error.recoverable = true;
         }
         if (error.recoverable) {
-            dispatch(_openPasswordRequiredPrompt(conference));
+            // Added by vipin : Join the meeting if meeting password is present in url else prompt user for password
+            const password = APP.store.getState()['features/base/conference'].password///'123';
+            debugger;
+            const state = APP.store.getState();
+            if(password && password.length>0){
+                const result = next(action);
+                dispatch(setPassword(conference, conference.join, password));
+                return result;
+            }
+            else
+                dispatch(_openPasswordRequiredPrompt(conference));
         }
     } else {
         dispatch(hideDialog(PasswordRequiredPrompt));

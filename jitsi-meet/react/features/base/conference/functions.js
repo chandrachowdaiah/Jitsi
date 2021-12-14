@@ -13,6 +13,7 @@ import {
     participantLeft
 } from '../participants';
 import { toState } from '../redux';
+import { parseURLParams } from '../util';
 import { getBackendSafePath, getJitsiMeetGlobalNS, safeDecodeURIComponent } from '../util';
 
 import {
@@ -436,4 +437,20 @@ function safeStartCase(s = '') {
     return _.words(`${s}`.replace(/['\u2019]/g, '')).reduce(
         (result, word, index) => result + (index ? ' ' : '') + _.upperFirst(word)
         , '');
+}
+
+
+/**
+ * Retrieves the Meeting password, if any, defined by a specific
+ * {@link URL}.
+ *
+ * @param {URL} url - The {@code URL} to parse and retrieve the Meeting Password
+ * , if any, from.
+ * @returns {string} The Meeting Password, if any, defined by the specified
+ * {@code url}; otherwise, {@code undefined}.
+ */
+ export function parseMeetingPasswordFromURLParams(url: URL = window.location) {
+    debugger;
+    let password = parseURLParams(url, true, 'search').password;
+    return password;
 }

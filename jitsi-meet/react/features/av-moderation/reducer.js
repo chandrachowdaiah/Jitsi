@@ -19,7 +19,7 @@ import {
     PARTICIPANT_REJECTED
 } from './actionTypes';
 import { MEDIA_TYPE_TO_PENDING_STORE_KEY } from './constants';
-
+import { setPassword } from '../base/conference';
 const initialState = {
     audioModerationEnabled: false,
     videoModerationEnabled: false,
@@ -156,6 +156,8 @@ ReducerRegistry.register('features/av-moderation', (state = initialState, action
                 ...state
             };
         }
+
+       
 
         return state;
     }

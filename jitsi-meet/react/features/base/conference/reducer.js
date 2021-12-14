@@ -20,7 +20,8 @@ import {
     SET_PASSWORD,
     SET_PENDING_SUBJECT_CHANGE,
     SET_ROOM,
-    SET_START_MUTED_POLICY
+    SET_START_MUTED_POLICY,
+    SET_PASSWORD_FROM_URL
 } from './actionTypes';
 import { isRoomValid } from './functions';
 
@@ -78,10 +79,16 @@ ReducerRegistry.register(
             return set(state, 'followMeEnabled', action.enabled);
 
         case SET_LOCATION_URL:
+            debugger;
             return set(state, 'room', undefined);
 
         case SET_PASSWORD:
+            debugger;
             return _setPassword(state, action);
+            
+        case SET_PASSWORD_FROM_URL:
+            debugger;
+            return _setPasswordFromURL(state,action);    
 
         case SET_PENDING_SUBJECT_CHANGE:
             return set(state, 'pendingSubjectChange', action.subject);
@@ -381,6 +388,28 @@ function _setPassword(state, { conference, method, password }) {
 
     return state;
 }
+
+/**
+ * Reduces a specific Redux action SET_PASSWORD_FROM_URL of the feature base/conference.
+ *
+ * @param {Object} state - The Redux state of the feature base/conference.
+ * @param {Action} action - The Redux action SET_PASSWORD_FROM_URL to reduce.
+ * @private
+ * @returns {Object} The new state of the feature base/conference after the
+ * reduction of the specified action.
+ */
+ function _setPasswordFromURL(state, { password }) {
+   
+    if(password){
+        return assign(state, {
+            password
+        });
+    }
+
+    return state;
+}
+
+
 
 /**
  * Reduces a specific Redux action SET_ROOM of the feature base/conference.
