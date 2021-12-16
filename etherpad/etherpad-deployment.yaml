@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: etherpad-deployment
+  namespace: qa3
+  labels:
+    app: etherpad
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: etherpad
+  template:
+    metadata:
+      labels:
+        app: etherpad
+    spec:
+      containers:
+      - name: etherpad
+        image:  etherpad/etherpad:1.8.6
+        ports:
+        - containerPort: 9001
+ 
